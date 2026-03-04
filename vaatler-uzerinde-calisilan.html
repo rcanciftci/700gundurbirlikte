@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Üzerinde Çalışılan Vaatler — 700 Günde Neler Yaptık?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #1d1d1f;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 0 48px; height: 52px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    nav a {
+      text-decoration: none; font-size: 15px; color: #0071e3;
+      display: flex; align-items: center; gap: 5px; transition: opacity .2s;
+    }
+    nav a:hover { opacity: .65; }
+    nav .sep { color: #86868b; font-size: 15px; }
+    nav .current { font-size: 15px; font-weight: 500; color: #1d1d1f; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 72px 24px 52px;
+    }
+    .hero .eyebrow {
+      font-size: 13px; font-weight: 600; letter-spacing: .1em;
+      text-transform: uppercase; color: #0071e3; margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 700; letter-spacing: -.03em; line-height: 1.05;
+    }
+    .hero p {
+      margin-top: 16px; font-size: 18px; color: #6e6e73; line-height: 1.5;
+    }
+    .hero .count-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(0,113,227,.10); color: #0055b3;
+      font-size: 13px; font-weight: 700; border-radius: 20px;
+      padding: 4px 14px; margin-top: 20px;
+    }
+    .hero .count-badge svg { width: 14px; height: 14px; fill: #0055b3; }
+
+    /* ── GRID ── */
+    .grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 28px 80px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 580px) {
+      .grid { padding: 8px 16px 60px; }
+      nav { padding: 0 20px; }
+      .hero { padding: 48px 20px 40px; }
+    }
+
+    /* ── PROMISE CARD ── */
+    .p-card {
+      background: #f5f5f7;
+      border-radius: 16px;
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .p-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(145deg,#0071e3,#42a5f5);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .p-icon svg { width: 18px; height: 18px; fill: #fff; }
+    .p-title {
+      font-size: 14px; font-weight: 600; line-height: 1.4;
+      color: #1d1d1f; flex: 1;
+    }
+
+    /* ── SOCIAL FOOTER ── */
+    .social-footer {
+      border-top: 1px solid rgba(0,0,0,0.08);
+      padding: 40px 24px 52px;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+    }
+    .social-footer-label {
+      font-size: 11px; font-weight: 600; color: #aeaeb2;
+      letter-spacing: .1em; text-transform: uppercase;
+    }
+    .social-links { display: flex; gap: 12px; align-items: center; }
+    .social-link {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: #f5f5f7; display: flex; align-items: center;
+      justify-content: center; text-decoration: none; color: #3a3a3c;
+      transition: background .18s, transform .18s;
+    }
+    .social-link:hover { background: #e5e5ea; transform: translateY(-2px); }
+    .social-link svg { width: 18px; height: 18px; fill: currentColor; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">
+    <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M7 1L1 6.5L7 12" stroke="#0071e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Ana Sayfa
+  </a>
+  <span class="sep">/</span>
+  <a href="vaatler.html">Vaatler</a>
+  <span class="sep">/</span>
+  <span class="current">Üzerinde Çalışılan</span>
+</nav>
+
+<div class="hero">
+  <p class="eyebrow">Vaatler</p>
+  <h1>Çalışıyoruz</h1>
+  <p>Aktif olarak sürdürülen ve yürütülen projeler.</p>
+  <div class="count-badge">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+    15 Vaat Üzerinde Çalışılıyor
+  </div>
+</div>
+
+<div class="grid">
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Depreme Ön Hazırlık Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Deprem Öncesi Konteynır Kentlerin Oluşturulması Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Gerçekçi, Uygulanabilir, Halk Dostu Dönüşüm Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Güneş ve Rüzgar Enerjisi Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Modern Tarım Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Ata Sporları, Halk Oyunları Merkezi Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Sokak Hayvanları Sürdürülebilir Yaşam Alanlarının Oluşturulması Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Motor Sporları Yarışları Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Doğa Turizmi Desteklenecek, Geliştirilecek</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Gıda Atıkları ile Kompost Gübre Üretimi Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Tahtakale Köylü Pazarının Yeniden Açılması Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Yağmur Sularının Depolanması ve Yeniden Kullanılması Projesi, Güneş Enerjisi ve Yenilenebilir Enerji Projeleri</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Ata Sporları, Halk Oyunları Merkezi Projesi</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Dijital Bağımlılıkla Mücadele</div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+    <div class="p-title">Modern Tarım Projesi</div>
+  </div>
+
+</div>
+
+<div style="text-align:center;padding:40px 0 0;"><img src="logo.png" alt="Osmangazi Belediyesi" style="width:400px;height:auto;opacity:0.85;"></div>
+<footer class="social-footer">
+  <span class="social-footer-label">Bizi Takip Edin</span>
+  <div class="social-links">
+    <a class="social-link" href="https://www.osmangazi.bel.tr" target="_blank" rel="noopener" title="Web Sitesi">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+    <a class="social-link" href="https://www.instagram.com/osmangazibld/" target="_blank" rel="noopener" title="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a class="social-link" href="https://www.facebook.com/OsmangaziBld/" target="_blank" rel="noopener" title="Facebook">
+      <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    </a>
+    <a class="social-link" href="https://x.com/osmangazibld" target="_blank" rel="noopener" title="X">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a class="social-link" href="https://www.youtube.com/@OsmangaziBLD" target="_blank" rel="noopener" title="YouTube">
+      <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    </a>
+  </div>
+</footer>
+
+</body>
+</html>

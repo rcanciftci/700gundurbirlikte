@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Açılışlar — 700 Günde Neler Yaptık?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #1d1d1f;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 0 48px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    nav a {
+      text-decoration: none;
+      font-size: 15px;
+      color: #0071e3;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: opacity .2s;
+    }
+    nav a:hover { opacity: .65; }
+    nav .sep   { color: #86868b; font-size: 15px; }
+    nav .current { font-size: 15px; font-weight: 500; color: #1d1d1f; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 80px 24px 48px;
+    }
+    .hero .eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #1d1d1f;
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(42px, 6vw, 76px);
+      font-weight: 700;
+      letter-spacing: -.03em;
+      line-height: 1.05;
+    }
+    .hero p {
+      margin-top: 18px;
+      font-size: 19px;
+      color: #6e6e73;
+      line-height: 1.5;
+    }
+
+    /* ── SUMMARY CHIPS ── */
+    .summary {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 0 24px 56px;
+    }
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: #f5f5f7;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1d1d1f;
+    }
+    .chip-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── YEAR SECTION ── */
+    .year-section {
+      max-width: 860px;
+      margin: 0 auto 60px;
+      padding: 0 24px;
+    }
+
+    .year-label {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: #1d1d1f;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e5e5ea;
+    }
+
+    /* ── EVENT ROW ── */
+    .event-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .event-row {
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      transition: background .15s;
+    }
+    .event-row:hover { background: #f5f5f7; }
+
+    /* category dot */
+    .cat-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .cat-dot svg {
+      width: 17px;
+      height: 17px;
+      fill: #fff;
+    }
+
+    .event-body { min-width: 0; }
+
+    .event-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1d1d1f;
+      line-height: 1.3;
+      white-space: normal;
+    }
+
+    .event-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 3px;
+    }
+
+    .event-date {
+      font-size: 12px;
+      color: #6e6e73;
+      font-weight: 500;
+    }
+
+    .badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .badge-acilis  { background: #e8f1fd; color: #0071e3; }
+    .badge-temel   { background: #fff2e0; color: #c93400; }
+    .badge-proje   { background: #f0f0f5; color: #6e6e73; }
+
+    /* category colors */
+    .bg-kres    { background: #8944ab; }
+    .bg-spor    { background: #248a3d; }
+    .bg-park    { background: #0c817a; }
+    .bg-kultur  { background: #3634a3; }
+    .bg-sosyal  { background: #c30055; }
+    .bg-kentsel { background: #6e6e73; }
+
+    /* Planned section */
+    .planned-note {
+      font-size: 12px;
+      color: #86868b;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 20px; }
+      .hero { padding: 48px 20px 36px; }
+      .year-label { font-size: 22px; }
+      .event-row { padding: 12px 8px; }
+    }
+
+    .footer-space { height: 100px; }
+  
+    /* ── SOCIAL FOOTER ── */
+    .social-footer {
+      border-top: 1px solid rgba(0,0,0,0.08);
+      padding: 40px 24px 52px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .social-footer-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #aeaeb2;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .social-links {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .social-link {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #f5f5f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #3a3a3c;
+      transition: background .18s, transform .18s;
+    }
+    .social-link:hover {
+      background: #e5e5ea;
+      transform: translateY(-2px);
+    }
+    .social-link svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">
+    <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M7 1L1 6.5L7 12" stroke="#0071e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Ana Sayfa
+  </a>
+  <span class="sep">/</span>
+  <span class="current">Açılışlar</span>
+</nav>
+
+<div class="hero">
+  <p class="eyebrow">700 Günde</p>
+  <h1>Açılışlar</h1>
+  <p>700 günde gerçekleştirilen açılış ve temel atma törenleri.</p>
+</div>
+
+<div class="summary">
+  <div class="chip"><div class="chip-dot" style="background:#0071e3"></div>26 Açılış</div>
+  <div class="chip"><div class="chip-dot" style="background:#c93400"></div>12 Temel Atma</div>
+  <div class="chip"><div class="chip-dot" style="background:#8944ab"></div>Kreş & Bakımevi</div>
+  <div class="chip"><div class="chip-dot" style="background:#248a3d"></div>Spor Tesisi</div>
+  <div class="chip"><div class="chip-dot" style="background:#0c817a"></div>Park & Yeşil Alan</div>
+  <div class="chip"><div class="chip-dot" style="background:#3634a3"></div>Kütüphane & Kültür</div>
+  <div class="chip"><div class="chip-dot" style="background:#c30055"></div>Sosyal Tesis</div>
+  <div class="chip"><div class="chip-dot" style="background:#6e6e73"></div>Kentsel & Altyapı</div>
+</div>
+
+<!-- ═══ 2024 ═══ -->
+<div class="year-section">
+  <div class="year-label">2024</div>
+  <div class="event-list">
+
+    <div class="event-row">
+      <div class="cat-dot bg-spor"><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Çirişhane Spor Kulübü Lokali Temel Atma Töreni</div>
+        <div class="event-meta"><span class="event-date">22 Mayıs 2024</span><span class="badge badge-temel">Temel Atma</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kres"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Ayça Azak Kreşi ve Gündüz Bakımevi Temel Atma Töreni</div>
+        <div class="event-meta"><span class="event-date">31 Mayıs 2024</span><span class="badge badge-temel">Temel Atma</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-sosyal"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Osmangazi Halk Lokantası</div>
+        <div class="event-meta"><span class="event-date">10 Haziran 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-park"><svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22L6.66 19.7C7.14 19.87 7.64 20 8 20C19 20 22 3 22 3C21 5 14 5.25 9 6.25C4 7.25 2 11.5 2 13.5C2 15.5 3.75 17.25 3.75 17.25C7 8 17 8 17 8Z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Nasrettin Hoca Çocuk Parkı</div>
+        <div class="event-meta"><span class="event-date">29 Haziran 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kultur"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Hasan Âli Yücel Dünya Klasikleri Kütüphanesi</div>
+        <div class="event-meta"><span class="event-date">20 Temmuz 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-sosyal"><svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Osmangazi Meydanı Genç Cafe</div>
+        <div class="event-meta"><span class="event-date">20 Temmuz 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kultur"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Gezici Kütüphane</div>
+        <div class="event-meta"><span class="event-date">1 Ağustos 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-spor"><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Yeni Bağlar Kadın Spor ve Yaşam Merkezi</div>
+        <div class="event-meta"><span class="event-date">26 Ağustos 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kentsel"><svg viewBox="0 0 24 24"><path d="M9.64 7.64c.23-.5.36-1.05.36-1.64 0-2.21-1.79-4-4-4S2 3.79 2 6s1.79 4 4 4c.59 0 1.14-.13 1.64-.36L10 12l-2.36 2.36C7.14 14.13 6.59 14 6 14c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4c0-.59-.13-1.14-.36-1.64L12 14l7 7h3v-1L9.64 7.64zM6 8c-1.1 0-2-.89-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0 12c-1.1 0-2-.89-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6-7.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5.5.22.5.5-.22.5-.5.5zM19 3l-6 6 2 2 7-7V3z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Osmangazi Belediyesi Atatürk Anıtı Açılışı</div>
+        <div class="event-meta"><span class="event-date">30 Ağustos 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kres"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Ayça Azak Kreşi ve Gündüz Bakımevi Açılış Töreni</div>
+        <div class="event-meta"><span class="event-date">12 Ekim 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-spor"><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Emek Spor Tesisi Açılışı</div>
+        <div class="event-meta"><span class="event-date">14 Ekim 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kres"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Yunuseli Kreşi Temel Atma Töreni</div>
+        <div class="event-meta"><span class="event-date">17 Ekim 2024</span><span class="badge badge-temel">Temel Atma</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-park"><svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22L6.66 19.7C7.14 19.87 7.64 20 8 20C19 20 22 3 22 3C21 5 14 5.25 9 6.25C4 7.25 2 11.5 2 13.5C2 15.5 3.75 17.25 3.75 17.25C7 8 17 8 17 8Z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Hamitler İsmetpaşa Parkı Açılış Töreni</div>
+        <div class="event-meta"><span class="event-date">18 Ekim 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-park"><svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22L6.66 19.7C7.14 19.87 7.64 20 8 20C19 20 22 3 22 3C21 5 14 5.25 9 6.25C4 7.25 2 11.5 2 13.5C2 15.5 3.75 17.25 3.75 17.25C7 8 17 8 17 8Z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">İsmetpaşa Parkı Açılışı</div>
+        <div class="event-meta"><span class="event-date">18 Ekim 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kultur"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Mehmet Akif Mutlu Çocuk Kütüphanesi ve Sosyal Gelişim Merkezi</div>
+        <div class="event-meta"><span class="event-date">19 Ekim 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-spor"><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Çirişhane Spor Kulübü Lokali Açılış Töreni</div>
+        <div class="event-meta"><span class="event-date">28 Ekim 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kultur"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Osmangazi Gösteri Merkezi ve Nikahevi</div>
+        <div class="event-meta"><span class="event-date">29 Ekim 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kultur"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">İsmail Hakkı Tonguç Bağış ve Şiir Kütüphanesi</div>
+        <div class="event-meta"><span class="event-date">16 Kasım 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-sosyal"><svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Soğanlı Genç Cafe</div>
+        <div class="event-meta"><span class="event-date">16 Kasım 2024</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kres"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Küplüpınar Kreşi Temel Atma</div>
+        <div class="event-meta"><span class="event-date">7 Aralık 2024</span><span class="badge badge-temel">Temel Atma</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kres"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Küçükbalıklı Kreşi Temel Atma</div>
+        <div class="event-meta"><span class="event-date">21 Aralık 2024</span><span class="badge badge-temel">Temel Atma</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ 2025 ═══ -->
+<div class="year-section">
+  <div class="year-label">2025</div>
+  <div class="event-list">
+
+    <div class="event-row">
+      <div class="cat-dot bg-kultur"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Çadır Sanat Merkezi ve Kütüphanesi</div>
+        <div class="event-meta"><span class="event-date">20 Ocak 2025</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kentsel"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Romangal</div>
+        <div class="event-meta"><span class="event-date">27 Ocak 2025</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kentsel"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Atatürk Evi Temel Atma</div>
+        <div class="event-meta"><span class="event-date">1 Şubat 2025</span><span class="badge badge-temel">Temel Atma</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-sosyal"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Soğukkuyu Kent Lokantası ve Genç Kafe Açılışı</div>
+        <div class="event-meta"><span class="event-date">26 Şubat 2025</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-sosyal"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.34C18 2.06 15.96 0 13.34 0 11.9 0 10.6.63 9.64 1.65L8 3.34 6.36 1.64C5.4.63 4.1 0 2.66 0 .04 0-2 2.06-2 4.66c0 .46.1.9.18 1.34H-2v2h4l-2 8h16l-2-8h4V6z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Gençlik ve Girişimcilik Merkezi Açılışı</div>
+        <div class="event-meta"><span class="event-date">27 Şubat 2025</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-spor"><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Gündoğdu Alptuğ Memişoğlu Spor Sahası Açılışı</div>
+        <div class="event-meta"><span class="event-date">26 Nisan 2025</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-spor"><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Aksungur Spor Tesisi Temel Atma</div>
+        <div class="event-meta"><span class="event-date">1 Haziran 2025</span><span class="badge badge-temel">Temel Atma</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-spor"><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Çukurca Spor Tesisi Temel Atma</div>
+        <div class="event-meta"><span class="event-date">14 Haziran 2025</span><span class="badge badge-temel">Temel Atma</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kentsel"><svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4v10l8 4 8-4V7zm-8 1.08L17.17 11 12 13.92 6.83 11 12 8.08zM4 9.65l7 3.58v7.09L4 16.73V9.65zm9 10.67v-7.09l7-3.58v7.08l-7 3.59z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Mahalle Afet Konteynırı — Soğanlı Mahallesi Açılış</div>
+        <div class="event-meta"><span class="event-date">27 Haziran 2025</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-sosyal"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Koğukçınar Emekliler Lokali</div>
+        <div class="event-meta"><span class="event-date">12 Temmuz 2025</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kentsel"><svg viewBox="0 0 24 24"><path d="M1 11v11h9v-6h4v6h9V11L12 2 1 11zm18 9h-5v-6H10v6H5v-7.95l7-6.3 7 6.3V20z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Çirişhane Mahallesi Kentsel Dönüşüm Projesi</div>
+        <div class="event-meta"><span class="event-date">2 Ağustos 2025</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kentsel"><svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4v10l8 4 8-4V7zm-8 1.08L17.17 11 12 13.92 6.83 11 12 8.08zM4 9.65l7 3.58v7.09L4 16.73V9.65zm9 10.67v-7.09l7-3.58v7.08l-7 3.59z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Mahalle Afet Konteynırı — Sıra Meşeler Mahallesi Açılış</div>
+        <div class="event-meta"><span class="event-date">24 Ağustos 2025</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kultur"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Zamansız Kitaplar Müzesi (Seyyid Usül)</div>
+        <div class="event-meta"><span class="event-date">30 Ağustos 2025</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ 2026 ═══ -->
+<div class="year-section">
+  <div class="year-label">2026</div>
+  <div class="event-list">
+
+    <div class="event-row">
+      <div class="cat-dot bg-kres"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Candan Genceroğlu Kreş ve Gündüz Bakımevi</div>
+        <div class="event-meta"><span class="event-date">4 Ocak 2026</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kentsel"><svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.5L19.5 19h-15L12 5.5zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Demirtaş Sakarya Mahallesi Kapalı Pazaryeri Temel Atma</div>
+        <div class="event-meta"><span class="event-date">23 Ocak 2026</span><span class="badge badge-temel">Temel Atma</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kres"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Küplüpınar Kreşi Açılışı</div>
+        <div class="event-meta"><span class="event-date">8 Şubat 2026</span><span class="badge badge-acilis">Açılış</span></div>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="cat-dot bg-kres"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+      <div class="event-body">
+        <div class="event-name">Kükürtlü Kreşi Temel Atma</div>
+        <div class="event-meta"><span class="event-date">16 Şubat 2026</span><span class="badge badge-temel">Temel Atma</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<div style="text-align:center;padding:40px 0 0;"><img src="logo.png" alt="Osmangazi Belediyesi" style="width:400px;height:auto;opacity:0.85;"></div>
+<footer class="social-footer">
+  <span class="social-footer-label">Bizi Takip Edin</span>
+  <div class="social-links">
+    <a class="social-link" href="https://www.osmangazi.bel.tr" target="_blank" rel="noopener" title="Web Sitesi">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+    <a class="social-link" href="https://www.instagram.com/osmangazibld/" target="_blank" rel="noopener" title="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a class="social-link" href="https://www.facebook.com/OsmangaziBld/" target="_blank" rel="noopener" title="Facebook">
+      <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    </a>
+    <a class="social-link" href="https://x.com/osmangazibld" target="_blank" rel="noopener" title="X">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a class="social-link" href="https://www.youtube.com/@OsmangaziBLD" target="_blank" rel="noopener" title="YouTube">
+      <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    </a>
+  </div>
+</footer>
+
+<div class="footer-space"></div>
+</body>
+</html>
