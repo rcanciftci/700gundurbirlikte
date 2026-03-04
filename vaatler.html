@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vaatler — 700 Günde Neler Yaptık?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #1d1d1f;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 0 48px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    nav a {
+      text-decoration: none;
+      font-size: 15px;
+      color: #0071e3;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: opacity .2s;
+    }
+    nav a:hover { opacity: .65; }
+    nav .sep { color: #86868b; font-size: 15px; }
+    nav .current { font-size: 15px; font-weight: 500; color: #1d1d1f; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 80px 24px 60px;
+    }
+    .hero .eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #34c759;
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(42px, 6vw, 76px);
+      font-weight: 700;
+      letter-spacing: -.03em;
+      line-height: 1.05;
+    }
+    .hero p {
+      margin-top: 18px;
+      font-size: 19px;
+      color: #6e6e73;
+      line-height: 1.5;
+    }
+
+    /* ── CATEGORY GRID ── */
+    .grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 28px 80px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 860px)  { .grid { grid-template-columns: 1fr; max-width: 520px; } }
+    @media (max-width: 580px)  {
+      .grid { padding: 8px 16px 60px; }
+      nav  { padding: 0 20px; }
+      .hero { padding: 48px 20px 40px; }
+    }
+
+    /* ── CATEGORY CARD ── */
+    .cat-card {
+      background: #f5f5f7;
+      border-radius: 24px;
+      padding: 36px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      text-decoration: none;
+      color: #1d1d1f;
+      cursor: pointer;
+      transition: transform .28s cubic-bezier(.25,.46,.45,.94),
+                  box-shadow .28s cubic-bezier(.25,.46,.45,.94),
+                  background .2s;
+      position: relative;
+      overflow: hidden;
+      min-height: 260px;
+    }
+    .cat-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 55%);
+      pointer-events: none;
+    }
+    .cat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 44px rgba(0,0,0,.10);
+      background: #ebebed;
+    }
+    .cat-card:active { transform: translateY(0); box-shadow: none; }
+
+    /* ── CARD ICON ── */
+    .cat-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      flex-shrink: 0;
+    }
+    .cat-icon svg { width: 26px; height: 26px; fill: #fff; }
+
+    .cat-card--green  .cat-icon { background: linear-gradient(145deg,#248a3d,#34c759); }
+    .cat-card--blue   .cat-icon { background: linear-gradient(145deg,#0071e3,#42a5f5); }
+    .cat-card--indigo .cat-icon { background: linear-gradient(145deg,#3634a3,#5856d6); }
+
+    /* ── BADGE ── */
+    .cat-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      border-radius: 20px;
+      padding: 3px 10px;
+      margin-bottom: 14px;
+      width: fit-content;
+    }
+    .cat-card--green  .cat-badge { background: rgba(52,199,89,.15);  color: #1a7a2e; }
+    .cat-card--blue   .cat-badge { background: rgba(0,113,227,.12);  color: #0055b3; }
+    .cat-card--indigo .cat-badge { background: rgba(88,86,214,.12);  color: #2d2b9e; }
+
+    /* ── CARD TITLE ── */
+    .cat-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      flex: 1;
+    }
+    .cat-card--green  .cat-title { color: #1a7a2e; }
+    .cat-card--blue   .cat-title { color: #0055b3; }
+    .cat-card--indigo .cat-title { color: #2d2b9e; }
+
+    /* ── CARD DESC ── */
+    .cat-desc {
+      font-size: 14px;
+      color: #6e6e73;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    /* ── ARROW ── */
+    .cat-arrow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: gap .2s;
+    }
+    .cat-card--green  .cat-arrow { color: #248a3d; }
+    .cat-card--blue   .cat-arrow { color: #0071e3; }
+    .cat-card--indigo .cat-arrow { color: #3634a3; }
+    .cat-card:hover .cat-arrow { gap: 10px; }
+    .cat-arrow svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* ── SOCIAL FOOTER ── */
+    .social-footer {
+      border-top: 1px solid rgba(0,0,0,0.08);
+      padding: 40px 24px 52px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .social-footer-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #aeaeb2;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .social-links { display: flex; gap: 12px; align-items: center; }
+    .social-link {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: #f5f5f7;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; color: #3a3a3c;
+      transition: background .18s, transform .18s;
+    }
+    .social-link:hover { background: #e5e5ea; transform: translateY(-2px); }
+    .social-link svg { width: 18px; height: 18px; fill: currentColor; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">
+    <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M7 1L1 6.5L7 12" stroke="#0071e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Ana Sayfa
+  </a>
+  <span class="sep">/</span>
+  <span class="current">Vaatler</span>
+</nav>
+
+<div class="hero">
+  <p class="eyebrow">700 Günde</p>
+  <h1>Vaatler</h1>
+  <p>Seçim vaatlerimizin bugünkü durumu — şeffaf ve güncel.</p>
+</div>
+
+<div class="grid">
+
+  <!-- Gerçekleştirilen -->
+  <a class="cat-card cat-card--green" href="vaatler-gerceklestirilen.html">
+    <div class="cat-icon">
+      <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+    </div>
+    <span class="cat-badge">40 Vaat</span>
+    <div class="cat-title">Yaptık</div>
+    <div class="cat-desc">Tamamlanan ve hayata geçirilen projeler.</div>
+    <div class="cat-arrow">
+      İncele
+      <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </div>
+  </a>
+
+  <!-- Üzerinde Çalışılan -->
+  <a class="cat-card cat-card--blue" href="vaatler-uzerinde-calisilan.html">
+    <div class="cat-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+    </div>
+    <span class="cat-badge">13 Vaat</span>
+    <div class="cat-title">Çalışıyoruz</div>
+    <div class="cat-desc">Aktif olarak sürdürülen ve yürütülen projeler.</div>
+    <div class="cat-arrow">
+      İncele
+      <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </div>
+  </a>
+
+  <!-- Hazırlık Aşamasında -->
+  <a class="cat-card cat-card--indigo" href="vaatler-hazirlik.html">
+    <div class="cat-icon">
+      <svg viewBox="0 0 24 24"><path d="M6 2v6l2.5 2.5L6 13v6h12v-6l-2.5-2.5L18 8V2H6zm10 10.5V18H8v-5.5l4-4 4 4zm-4-4.83L9.17 10H14.83L12 7.67zM16 4v3.17l-4 4-4-4V4h8z"/></svg>
+    </div>
+    <span class="cat-badge">5 Vaat</span>
+    <div class="cat-title">Yapacağız</div>
+    <div class="cat-desc">Planlama ve hazırlık sürecindeki projeler.</div>
+    <div class="cat-arrow">
+      İncele
+      <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </div>
+  </a>
+
+</div>
+
+<div style="text-align:center;padding:40px 0 0;"><img src="logo.png" alt="Osmangazi Belediyesi" style="width:400px;height:auto;opacity:0.85;"></div>
+<footer class="social-footer">
+  <span class="social-footer-label">Bizi Takip Edin</span>
+  <div class="social-links">
+    <a class="social-link" href="https://www.osmangazi.bel.tr" target="_blank" rel="noopener" title="Web Sitesi">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+    <a class="social-link" href="https://www.instagram.com/osmangazibld/" target="_blank" rel="noopener" title="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a class="social-link" href="https://www.facebook.com/OsmangaziBld/" target="_blank" rel="noopener" title="Facebook">
+      <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    </a>
+    <a class="social-link" href="https://x.com/osmangazibld" target="_blank" rel="noopener" title="X">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a class="social-link" href="https://www.youtube.com/@OsmangaziBLD" target="_blank" rel="noopener" title="YouTube">
+      <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    </a>
+  </div>
+</footer>
+
+</body>
+</html>
